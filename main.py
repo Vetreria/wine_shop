@@ -8,8 +8,8 @@ import pandas
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 
-def get_data(data_goods):
-    goods_list = pandas.read_excel(data_goods, keep_default_na=False).to_dict(
+def get_goods(file_goods):
+    goods_list = pandas.read_excel(file_goods, keep_default_na=False).to_dict(
         orient="records"
     )
     goods_type = defaultdict(list)
@@ -30,14 +30,14 @@ def get_years(start_date):
         return "{0} лет".format(x)
 
 
-def render_page(data_goods, start_date):
+def render_page(file_goods, start_date):
     env = Environment(
         loader=FileSystemLoader("."), autoescape=select_autoescape(["html", "xml"])
     )
     feedback_desc = "Уже {0} с вами".format(get_years(start_date))
     template = env.get_template("template.html")
     rendered_page = template.render(
-        feedback_desc=feedback_desc, goods_type=get_data(data_goods)
+        feedback_desc=feedback_desc, goods_type=get_goods(file_goods)
     )
 
     with open("index.html", "w", encoding="utf8") as file:
@@ -46,9 +46,9 @@ def render_page(data_goods, start_date):
 
 def main():
     dotenv.load_dotenv()
-    data_goods = os.getenv("EXCEL")
+    file_goods = os.getenv("EXCEL")
     start_date = os.getenv("START_DATE")
-    render_page(data_goods, start_date)
+    render_page(file_goods, start_date)
     server = HTTPServer(("0.0.0.0", 8000), SimpleHTTPRequestHandler)
     server.serve_forever()
 
