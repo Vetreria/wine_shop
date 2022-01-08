@@ -12,32 +12,32 @@ def get_goods(file_goods):
     goods = pandas.read_excel(file_goods, keep_default_na=False).to_dict(
         orient="records"
     )
-    goods_type = defaultdict(list)
+    goods_group = defaultdict(list)
     for good in goods:
-        goods_type[good["Категория"]].append(good)
-    return goods_type
+        goods_group[good["Категория"]].append(good)
+    return goods_group
 
 
-def get_years(start_date):
-    d1 = int(start_date)
-    d2 = datetime.datetime.now().year
-    x = d2 - d1
-    if x % 10 == 1 and x != 11 and x % 100 != 11:
-        return "{0} год".format(x)
-    elif 1 < x % 10 <= 4 and x != 12 and x != 13 and x != 14:
-        return "{0} года".format(x)
+def get_years(start_year):
+    year_estate = int(start_year)
+    year_now = datetime.datetime.now().year
+    age = year_now - year_estate
+    if age % 10 == 1 and age != 11 and age % 100 != 11:
+        return "{0} год".format(age)
+    elif 1 < age % 10 <= 4 and age != 12 and age != 13 and age != 14:
+        return "{0} года".format(age)
     else:
-        return "{0} лет".format(x)
+        return "{0} лет".format(age)
 
 
-def render_page(file_goods, start_date):
+def render_page(file_goods, start_year):
     env = Environment(
         loader=FileSystemLoader("."), autoescape=select_autoescape(["html", "xml"])
     )
-    feedback_desc = "Уже {0} с вами".format(get_years(start_date))
+    feedback_desc = "Уже {0} с вами".format(get_years(start_year))
     template = env.get_template("template.html")
     rendered_page = template.render(
-        feedback_desc=feedback_desc, goods_type=get_goods(file_goods)
+        feedback_desc=feedback_desc, goods_group=get_goods(file_goods)
     )
 
     with open("index.html", "w", encoding="utf8") as file:
@@ -46,9 +46,9 @@ def render_page(file_goods, start_date):
 
 def main():
     dotenv.load_dotenv()
-    file_goods = os.getenv("EXCEL")
-    start_date = os.getenv("START_DATE")
-    render_page(file_goods, start_date)
+    file_goods = os.getenv("EXCEL_PATCH")
+    start_year = os.getenv("START_YEAR")
+    render_page(file_goods, start_year)
     server = HTTPServer(("0.0.0.0", 8000), SimpleHTTPRequestHandler)
     server.serve_forever()
 
