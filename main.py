@@ -9,11 +9,11 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 
 def get_goods(file_goods):
-    goods_list = pandas.read_excel(file_goods, keep_default_na=False).to_dict(
+    goods = pandas.read_excel(file_goods, keep_default_na=False).to_dict(
         orient="records"
     )
     goods_type = defaultdict(list)
-    for good in goods_list:
+    for good in goods:
         goods_type[good["Категория"]].append(good)
     return goods_type
 
