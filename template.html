@@ -120,22 +120,22 @@
         <div class="row">
 
 
-          {% for good_category, good_card in good_cards | dictsort %}
+          {% for goods_category, goods_card in goods_cards | dictsort %}
 
 
           <div class="col-12 section-title text-center mb-5">
-            <h2 class="d-block">{{ good_category }}</h2>
+            <h2 class="d-block">{{ goods_category }}</h2>
           </div>
 
 
-          {% for good in good_group %}
+          {% for goods in goods_card %}
 
 
           <div class="col-lg-4 mb-5 col-md-6">
             <div class="wine_v_1 text-center pb-4 pt-5">
-              <img src="images/{{  good.Картинка  }}" alt="Image" class="img-fluid">
+              <img src="images/{{  goods.Картинка  }}" alt="Image" class="img-fluid">
 
-              {% if good.Акция %}
+              {% if goods.Акция %}
 
               <img src="assets/profitable.png"
                 style="width:10rem; height: 10rem; position:absolute; right: -20px; top: -20px;">
@@ -145,17 +145,17 @@
 
 
               <div>
-                <h3 class="heading mt-3 mb-3 text-dark"> {{ good.Название }} </h3>
+                <h3 class="heading mt-3 mb-3 text-dark"> {{ goods.Название }} </h3>
                 <p>
 
 
-                  {% if good.Сорт %}
-                  Сорт винограда - {{ good.Сорт }}
+                  {% if goods.Сорт %}
+                  Сорт винограда - {{ goods.Сорт }}
                   {% endif %}
 
 
                   <br />
-                  <span class="price"> {{ good.Цена }} р.</span>
+                  <span class="price"> {{ goods.Цена }} р.</span>
                 </p>
               </div>
             </div>
