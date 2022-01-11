@@ -12,10 +12,10 @@ def get_goods(excel_path):
     goods = pandas.read_excel(excel_path, keep_default_na=False).to_dict(
         orient="records"
     )
-    goods_group = defaultdict(list)
+    good_cards = defaultdict(list)
     for good in goods:
-        goods_group[good["Категория"]].append(good)
-    return goods_group
+        good_cards[good["Категория"]].append(good)
+    return good_cards
 
 
 def get_years(start_year):
@@ -36,7 +36,7 @@ def render_page(excel_path, start_year):
     winery_age = "Уже {0} с вами".format(get_years(start_year))
     template = env.get_template("template.html")
     rendered_page = template.render(
-        winery_age=winery_age, goods_group=get_goods(excel_path)
+        winery_age=winery_age, good_cards=get_goods(excel_path)
     )
 
     with open("index.html", "w", encoding="utf8") as file:
