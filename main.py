@@ -19,9 +19,8 @@ def get_goods(file_goods):
 
 
 def get_years(start_year):
-    year_estate = int(start_year)
     year_now = datetime.datetime.now().year
-    age = year_now - year_estate
+    age = year_now - int(start_year)
     if age % 10 == 1 and age != 11 and age % 100 != 11:
         return "{0} год".format(age)
     elif 1 < age % 10 <= 4 and age != 12 and age != 13 and age != 14:
