@@ -33,10 +33,10 @@ def render_page(file_goods, start_year):
     env = Environment(
         loader=FileSystemLoader("."), autoescape=select_autoescape(["html", "xml"])
     )
-    feedback_desc = "Уже {0} с вами".format(get_years(start_year))
+    winery_age = "Уже {0} с вами".format(get_years(start_year))
     template = env.get_template("template.html")
     rendered_page = template.render(
-        feedback_desc=feedback_desc, goods_group=get_goods(file_goods)
+        winery_age=winery_age, goods_group=get_goods(file_goods)
     )
 
     with open("index.html", "w", encoding="utf8") as file:
