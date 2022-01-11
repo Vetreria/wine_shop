@@ -8,8 +8,8 @@ import pandas
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 
-def get_goods(excel_patch):
-    goods = pandas.read_excel(excel_patch, keep_default_na=False).to_dict(
+def get_goods(excel_path):
+    goods = pandas.read_excel(excel_path, keep_default_na=False).to_dict(
         orient="records"
     )
     goods_group = defaultdict(list)
@@ -29,14 +29,14 @@ def get_years(start_year):
         return "{0} лет".format(age)
 
 
-def render_page(excel_patch, start_year):
+def render_page(excel_path, start_year):
     env = Environment(
         loader=FileSystemLoader("."), autoescape=select_autoescape(["html", "xml"])
     )
     winery_age = "Уже {0} с вами".format(get_years(start_year))
     template = env.get_template("template.html")
     rendered_page = template.render(
-        winery_age=winery_age, goods_group=get_goods(excel_patch)
+        winery_age=winery_age, goods_group=get_goods(excel_path)
     )
 
     with open("index.html", "w", encoding="utf8") as file:
@@ -45,9 +45,9 @@ def render_page(excel_patch, start_year):
 
 def main():
     dotenv.load_dotenv()
-    excel_patch = os.getenv("EXCEL_PATCH")
+    excel_path = os.getenv("EXCEL_PATH")
     start_year = os.getenv("START_YEAR")
-    render_page(excel_patch, start_year)
+    render_page(excel_path, start_year)
     server = HTTPServer(("0.0.0.0", 8000), SimpleHTTPRequestHandler)
     server.serve_forever()
 
